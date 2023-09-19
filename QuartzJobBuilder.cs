@@ -141,7 +141,7 @@ public class QuartzJobBuilder
 
     internal void UniqueJobItem()
     {
-        JobItems.GroupBy(item => item.JKey).Where(item => item.Count() > 1)
+        JobItems.Where(item => item != null).GroupBy(item => item.JKey).Where(item => item.Count() > 1)
         .ForEach(item =>
         {
             item.SelectWithIndex().ForEach((job) =>

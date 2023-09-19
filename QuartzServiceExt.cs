@@ -12,7 +12,7 @@ public static class QuartzServiceExt
     /// </summary>
     public static IServiceCollection AddDIJobFactory(this IServiceCollection services)
     {
-        if (!services.Any(item => item.Lifetime == ServiceLifetime.Singleton && item.ServiceType == typeof(DIJobFactory)))
+        if (!services.Any(item => item.Lifetime == ServiceLifetime.Singleton && item.ServiceType == typeof(IJobFactory)))
             services.AddSingleton<IJobFactory, DIJobFactory>();
         return services;
     }
@@ -22,7 +22,7 @@ public static class QuartzServiceExt
     public static IServiceCollection AddJob<Job>(this IServiceCollection services, int len) where Job : class, IJob
     {
         QuartzNode.Builder.AddJob<Job>(len);
-        return services.AddScoped<Job>().AddDIJobFactory();
+        return services.AddTransient<Job>().AddDIJobFactory();
     }
     /// <summary>
     /// 添加一个job
@@ -30,7 +30,7 @@ public static class QuartzServiceExt
     public static IServiceCollection AddJob<Job>(this IServiceCollection services, string cron) where Job : class, IJob
     {
         QuartzNode.Builder.AddJob<Job>(cron);
-        return services.AddScoped<Job>().AddDIJobFactory();
+        return services.AddTransient<Job>().AddDIJobFactory();
     }
     /// <summary>
     /// 添加多个job
@@ -38,7 +38,7 @@ public static class QuartzServiceExt
     public static IServiceCollection AddJobs<Job>(this IServiceCollection services, params int[] len) where Job : class, IJob
     {
         QuartzNode.Builder.AddJob<Job>(len);
-        return services.AddScoped<Job>().AddDIJobFactory();
+        return services.AddTransient<Job>().AddDIJobFactory();
     }
     /// <summary>
     /// 添加多个job
@@ -46,7 +46,7 @@ public static class QuartzServiceExt
     public static IServiceCollection AddJobs<Job>(this IServiceCollection services, IEnumerable<string> crons) where Job : class, IJob
     {
         QuartzNode.Builder.AddJob<Job>(crons);
-        return services.AddScoped<Job>().AddDIJobFactory();
+        return services.AddTransient<Job>().AddDIJobFactory();
     }
     /// <summary>
     /// 从xml配置文件中添加job
@@ -153,7 +153,7 @@ public static class QuartzServiceExt
     {
         var jobs = (scanAll ? AppDomain.CurrentDomain.GetTypes<IJob>() : AppDomain.CurrentDomain.GetCustomerTypes<IJob>()).Where(item => !item.IsInterface && !item.IsAbstract);
         if (jobs.NotEmpty())
-            jobs.ForEach(job => services.AddScoped(job));
+            jobs.ForEach(job => services.AddTransient(job));
         return services;
     }
 }
