@@ -6,8 +6,6 @@
     <ItemGroup>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
         <ProjectReference Include="../../Collapsenav.Net.Tool.Quartz/Collapsenav.Net.Tool.Quartz.csproj" />
-    </ItemGroup>
-    <!-- <ItemGroup>
         <ProjectReference Include="../JobLib/JobLib.csproj" />
-    </ItemGroup> -->
+    </ItemGroup>
 </Project>

@@ -97,19 +97,22 @@ public static class QuartzServiceExt
         {
             var dicts = jsonString.ToObj<IDictionary<string, string>>();
             if (dicts.NotEmpty() && dicts.First().Key.NotEmpty() && dicts.First().Value.NotEmpty())
-                configs ??= QuartzConfigNode.ConvertFromKeyValue(dicts);
+                configs = QuartzConfigNode.ConvertFromKeyValue(dicts);
         }
         catch { }
 
         // 当上一种没有转换成功时尝试直接转为 QuartzConfigNode 格式
-        try
+        if (configs.IsEmpty())
         {
-            configs = jsonString.ToObj<IEnumerable<QuartzConfigNode>>() ?? Enumerable.Empty<IQuartzJsonConfig>();
+            try
+            {
+                configs = jsonString.ToObj<IEnumerable<QuartzConfigNode>>() ?? Enumerable.Empty<IQuartzJsonConfig>();
+            }
+            catch { }
+            // 如果两种转化都失效, 那就抛出异常让他们感受到第三方包的险恶
+            if (configs.IsEmpty() || configs.All(config => !config.CanUse()))
+                throw new ArgumentNullException(jsonString);
         }
-        catch { }
-        // 如果两种转化都失效, 那就抛出异常让他们感受到第三方包的险恶
-        if (configs.IsEmpty() || configs.All(config => !config.CanUse()))
-            throw new ArgumentNullException(jsonString);
         return services.AddQuartzJsonConfig(configs);
     }
     public static IServiceCollection AddQuartzJsonConfig(this IServiceCollection services, IConfigurationSection section)
@@ -120,20 +123,22 @@ public static class QuartzServiceExt
         {
             var dicts = section.Get<IDictionary<string, string>>();
             if (dicts.NotEmpty() && dicts.First().Key.NotEmpty() && dicts.First().Value.NotEmpty())
-                configs ??= QuartzConfigNode.ConvertFromKeyValue(dicts);
+                configs = QuartzConfigNode.ConvertFromKeyValue(dicts);
         }
         catch { }
 
         // 当上一种没有转换成功时尝试直接转为 QuartzConfigNode 格式
-        try
+        if (configs.IsEmpty())
         {
-            configs = section.Get<IEnumerable<QuartzConfigNode>>() ?? Enumerable.Empty<IQuartzJsonConfig>(); ;
+            try
+            {
+                configs = section.Get<IEnumerable<QuartzConfigNode>>() ?? Enumerable.Empty<IQuartzJsonConfig>(); ;
+            }
+            catch { }
+            // 如果两种转化都失效, 那就抛出异常让他们感受到第三方包的险恶
+            if (configs.IsEmpty() || configs.All(config => !config.CanUse()))
+                throw new ArgumentNullException(section.Key);
         }
-        catch { }
-        // 如果两种转化都失效, 那就抛出异常让他们感受到第三方包的险恶
-        if (configs.IsEmpty() || configs.All(config => !config.CanUse()))
-            throw new ArgumentNullException(section.Key);
-
         return services.AddQuartzJsonConfig(configs);
     }
     public static IServiceCollection AddQuartzJsonConfig(this IServiceCollection services, IQuartzJsonConfig config)

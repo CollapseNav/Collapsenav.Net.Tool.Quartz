@@ -117,9 +117,9 @@ public class QuartzJobBuilder
             JobItems.AddRange(CronJobs);
         if (SimpleJobs.NotEmpty())
             JobItems.AddRange(SimpleJobs);
-        var configs = ConfigNodes.Select(item => item.ToJobItem()).ToList();
+        var configs = ConfigNodes.Select(item => item.ToJobItem()).Where(i => i != null).ToList();
         if (configs.NotEmpty())
-            JobItems.AddRange(configs);
+            JobItems.AddRange(configs!);
         UniqueJobItem();
         if (sch != null)
         {

@@ -15,12 +15,14 @@ public class QuartzNode
     {
         Services = services;
     }
-#if NETCOREAPP2_0_OR_GREATER
+#if NETCOREAPP2_1_OR_GREATER
     [MemberNotNull("Scheduler")]
 #endif
     public static async Task InitSchedulerAsync(IScheduler? scheduler = null)
     {
+#pragma warning disable CS8774 // 退出时，成员必须具有非 null 值。
         Scheduler = scheduler ?? await new StdSchedulerFactory().GetScheduler();
+#pragma warning restore CS8774 // 退出时，成员必须具有非 null 值。
     }
 
     public static void InitFactory(IJobFactory factory)

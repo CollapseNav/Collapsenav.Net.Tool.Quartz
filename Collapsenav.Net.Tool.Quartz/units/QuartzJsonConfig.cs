@@ -7,7 +7,7 @@ namespace Collapsenav.Net.Tool.Ext;
 /// </summary>
 public interface IQuartzJsonConfig
 {
-    JobItem ToJobItem();
+    JobItem? ToJobItem();
     bool CanUse();
 }
 
@@ -76,7 +76,7 @@ public class QuartzConfigNode : IQuartzJsonConfig
     /// <summary>
     /// 将config转为jobitem
     /// </summary>
-    public JobItem ToJobItem()
+    public JobItem? ToJobItem()
     {
         var type = QuartzNode.GetJobType(JobName);
         if (type == null)
