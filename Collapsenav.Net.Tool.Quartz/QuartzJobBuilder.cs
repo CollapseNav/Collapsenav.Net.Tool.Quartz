@@ -44,17 +44,9 @@ public class QuartzJobBuilder
         if (obj is not (string or int))
             throw new Exception("input must be string or int");
         if (obj is string cron)
-            CronJobs.Add(new CronJob
-            {
-                JobType = type,
-                Cron = cron,
-            });
+            CronJobs.Add(new CronJob(type, cron));
         else if (obj is int len)
-            SimpleJobs.Add(new SimpleJob
-            {
-                JobType = type,
-                Len = len,
-            });
+            SimpleJobs.Add(new SimpleJob(type, len));
     }
     /// <summary>
     /// 添加SimpleJob
@@ -73,10 +65,8 @@ public class QuartzJobBuilder
         var keys = QuartzTool.CreateJobKeyAndTriggerKey(len.Length, type).ToArray();
         for (var i = 0; i < len.Length; i++)
         {
-            SimpleJobs.Add(new SimpleJob
+            SimpleJobs.Add(new SimpleJob(type, len[i])
             {
-                JobType = type,
-                Len = len[i],
                 JKey = keys[i].JKey,
                 TKey = keys[i].TKey,
             });
@@ -100,10 +90,8 @@ public class QuartzJobBuilder
         var keys = QuartzTool.CreateJobKeyAndTriggerKey(list.Length, type).ToArray();
         for (var i = 0; i < list.Length; i++)
         {
-            CronJobs.Add(new CronJob
+            CronJobs.Add(new CronJob(type, list[i])
             {
-                JobType = type,
-                Cron = list[i],
                 JKey = keys[i].JKey,
                 TKey = keys[i].TKey,
             });

@@ -82,19 +82,11 @@ public class QuartzConfigNode : IQuartzJsonConfig
             return null;
         if (Cron.NotEmpty())
         {
-            return new CronJob
-            {
-                Cron = Cron,
-                JobType = type,
-            };
+            return new CronJob(type, Cron);
         }
         if (Len.HasValue)
         {
-            return new SimpleJob
-            {
-                Len = Len.Value,
-                JobType = type
-            };
+            return new SimpleJob(type, Len.Value);
         }
         return null;
     }
