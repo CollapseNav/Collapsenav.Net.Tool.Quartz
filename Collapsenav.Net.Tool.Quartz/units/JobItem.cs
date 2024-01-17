@@ -10,9 +10,9 @@ public abstract class JobItem
     }
     public Type JobType { get; set; }
     public JobKey JKey { get => jKey ?? new JobKey(JobType.Name, JobType.Name); set => jKey = value; }
-    private JobKey jKey;
+    private JobKey? jKey;
     public TriggerKey TKey { get => tKey ?? new TriggerKey(JobType.Name, JobType.Name); set => tKey = value; }
-    private TriggerKey tKey;
+    private TriggerKey? tKey;
     public abstract ITrigger GetTrigger();
     public virtual IJobDetail GetJobDetail() => QuartzTool.CreateJob(JobType, JKey);
 }

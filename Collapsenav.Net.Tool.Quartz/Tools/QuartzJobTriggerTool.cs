@@ -5,7 +5,11 @@ namespace Collapsenav.Net.Tool.Ext;
 public static partial class QuartzTool
 {
     public static IEnumerable<JobTriggerKey> CreateJobKeyAndTriggerKey(int count, string name, string? group = null)
-        => count <= 0 ? null : Enumerable.Range(0, count).Select(item => new JobTriggerKey(new JobKey($"{name}_{item}", $"{group.IsEmpty(name)}"), new TriggerKey($"{name}_{item}", $"{group.IsEmpty(name)}")));
+    {
+        if (count <= 0)
+            return Enumerable.Empty<JobTriggerKey>();
+        return Enumerable.Range(0, count).Select(item => new JobTriggerKey(new JobKey($"{name}_{item}", $"{group.IsEmpty(name)}"), new TriggerKey($"{name}_{item}", $"{group.IsEmpty(name)}")));
+    }
     public static IEnumerable<JobTriggerKey> CreateJobKeyAndTriggerKey(int count, Type type, string? group = null) => CreateJobKeyAndTriggerKey(count, type.Name, group);
     public static IEnumerable<JobTriggerKey> CreateJobKeyAndTriggerKey<Job>(int count, string? group = null) where Job : IJob => CreateJobKeyAndTriggerKey(count, typeof(Job).Name, group);
 

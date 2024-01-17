@@ -1,7 +1,5 @@
 using Quartz;
-
 namespace Collapsenav.Net.Tool.Ext;
-
 public static partial class QuartzTool
 {
     /// <summary>
@@ -24,7 +22,11 @@ public static partial class QuartzTool
     /// </summary>
     public static IJobDetail CreateJob<Job>(string name, string? group = null) where Job : IJob => CreateJob(typeof(Job), name, group);
     public static IEnumerable<JobKey> CreateJobKeys(int count, string name, string? group = null)
-        => count <= 0 ? null : Enumerable.Range(0, count).Select(item => new JobKey($"{name}_{item}", $"{group.IsEmpty(name)}"));
+    {
+        if (count <= 0)
+            return Enumerable.Empty<JobKey>();
+        return Enumerable.Range(0, count).Select(item => new JobKey($"{name}_{item}", $"{group.IsEmpty(name)}"));
+    }
     public static IEnumerable<JobKey> CreateJobKeys(int count, Type type, string? group = null) => CreateJobKeys(count, type.Name, group);
     public static IEnumerable<JobKey> CreateJobKeys<Job>(int count, string? group = null) where Job : IJob => CreateJobKeys(count, typeof(Job).Name, group);
 }

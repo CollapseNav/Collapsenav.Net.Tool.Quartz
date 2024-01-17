@@ -12,7 +12,12 @@ public static partial class QuartzTool
         var jobKeys = await scheduler.GetJobKeys(group);
         List<IJobDetail> details = new();
         foreach (var key in jobKeys)
-            details.Add(await scheduler.GetJobDetail(key));
+        {
+            var item = await scheduler.GetJobDetail(key);
+            if (item == null)
+                continue;
+            details.Add(item);
+        }
         return details;
     }
     public static async Task<IReadOnlyCollection<ITrigger>> GetTriggers(this IScheduler scheduler, string? group = null)
@@ -20,7 +25,12 @@ public static partial class QuartzTool
         var triggerKeys = await scheduler.GetTriggerKeys(group);
         List<ITrigger> triggers = new();
         foreach (var key in triggerKeys)
-            triggers.Add(await scheduler.GetTrigger(key));
+        {
+            var item = await scheduler.GetTrigger(key);
+            if (item == null)
+                continue;
+            triggers.Add(item);
+        }
         return triggers;
     }
     public static async Task<IReadOnlyCollection<JobStatus>> GetJobStatus(this IScheduler scheduler)

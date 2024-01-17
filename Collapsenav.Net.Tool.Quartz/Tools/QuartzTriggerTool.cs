@@ -8,7 +8,7 @@ public static partial class QuartzTool
     {
         // 传入的obj必须是 string 或 int
         if (obj is not (string or int))
-            return null;
+            throw new ArgumentException("obj need int or string");
         // 初始化一个 builder
         var triggerBuilder = TriggerBuilder.Create()
             .WithIdentity(tkey);
@@ -76,7 +76,11 @@ public static partial class QuartzTool
     /// </summary>
     public static IEnumerable<ITrigger> CreateTriggers<Job>(params int[] crons) where Job : IJob => CreateTriggers(typeof(Job), crons);
     public static IEnumerable<TriggerKey> CreateTriggerKeys(int count, string name, string? group = null)
-    => count <= 0 ? null : Enumerable.Range(0, count).Select(item => new TriggerKey($"{name}_{item}", $"{group ?? name}"));
+    {
+        if (count <= 0)
+            return Enumerable.Empty<TriggerKey>();
+        return Enumerable.Range(0, count).Select(item => new TriggerKey($"{name}_{item}", $"{group ?? name}"));
+    }
     public static IEnumerable<TriggerKey> CreateTriggerKeys(int count, Type type, string? group = null) => CreateTriggerKeys(count, type.Name, group);
     public static IEnumerable<TriggerKey> CreateTriggerKeys<Job>(int count, string? group = null) where Job : IJob => CreateTriggerKeys(count, typeof(Job).Name, group);
 }

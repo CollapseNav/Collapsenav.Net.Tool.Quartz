@@ -13,6 +13,17 @@ public interface IQuartzJsonConfig
 
 public class QuartzConfigNode : IQuartzJsonConfig
 {
+    public QuartzConfigNode(string jobName, int len)
+    {
+        JobName = jobName;
+        Len = len;
+    }
+    public QuartzConfigNode(string jobName, string cron)
+    {
+        JobName = jobName;
+        Cron = cron;
+    }
+
     /// <summary>
     /// Job 名称
     /// </summary>
@@ -20,7 +31,7 @@ public class QuartzConfigNode : IQuartzJsonConfig
     /// <summary>
     /// Cron 表达式
     /// </summary>
-    public string Cron { get; set; }
+    public string? Cron { get; set; }
     /// <summary>
     /// 间隔时间
     /// </summary>
@@ -46,18 +57,8 @@ public class QuartzConfigNode : IQuartzJsonConfig
     public static QuartzConfigNode ConvertFromKeyValue(string key, string value)
     {
         if (int.TryParse(value, out int len))
-        {
-            return new QuartzConfigNode
-            {
-                JobName = key,
-                Len = len
-            };
-        }
-        return new QuartzConfigNode
-        {
-            JobName = key,
-            Cron = value
-        };
+            return new QuartzConfigNode(key, len);
+        return new QuartzConfigNode(key, value);
     }
 
     /// <summary>
@@ -81,13 +82,9 @@ public class QuartzConfigNode : IQuartzJsonConfig
         if (type == null)
             return null;
         if (Cron.NotEmpty())
-        {
             return new CronJob(type, Cron);
-        }
         if (Len.HasValue)
-        {
             return new SimpleJob(type, Len.Value);
-        }
         return null;
     }
 }
