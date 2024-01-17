@@ -122,7 +122,7 @@ public class QuartzJobBuilder
     /// 构建 scheduler 的job
     /// </summary>
     /// <remarks>默认情况下会构建 QuartzNode.Scheduler</remarks>
-    public async Task Build(IScheduler scheduler = null)
+    public async Task Build(IScheduler? scheduler = null)
     {
         var sch = scheduler ?? QuartzNode.Scheduler;
         if (CronJobs.NotEmpty())
@@ -133,10 +133,13 @@ public class QuartzJobBuilder
         if (configs.NotEmpty())
             JobItems.AddRange(configs);
         UniqueJobItem();
-        foreach (var item in JobItems)
-            await sch?.ScheduleJob(item.GetJobDetail(), item.GetTrigger());
-        foreach (var path in XmlConfig)
-            await sch?.LoadXmlConfig(path);
+        if (sch != null)
+        {
+            foreach (var item in JobItems)
+                await sch.ScheduleJob(item.GetJobDetail(), item.GetTrigger());
+            foreach (var path in XmlConfig)
+                await sch.LoadXmlConfig(path);
+        }
     }
 
     internal void UniqueJobItem()

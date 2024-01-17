@@ -13,20 +13,24 @@ public class JobStatus
     /// </summary>
     public static JobStatus GenJobStatus(IJobDetail jobDetail, IEnumerable<ITrigger> triggers)
     {
-        var crons = triggers?.Where(item => item is CronTriggerImpl).Select(item => (item as CronTriggerImpl).CronExpressionString);
-        var lens = triggers?.Where(item => item is SimpleTriggerImpl).Select(item => (item as SimpleTriggerImpl).RepeatInterval.Seconds);
-        var status = new JobStatus
+        var crons = triggers.Where(item => item is CronTriggerImpl).Select(item => (item as CronTriggerImpl)!.CronExpressionString!);
+        var lens = triggers.Where(item => item is SimpleTriggerImpl).Select(item => (item as SimpleTriggerImpl)!.RepeatInterval.Seconds!);
+        var status = new JobStatus(jobDetail, crons, lens)
         {
-            Job = jobDetail,
             Triggers = triggers,
-            Crons = crons.IsEmpty() ? null : crons,
-            Lens = lens.IsEmpty() ? null : lens,
         };
         return status;
     }
+    public JobStatus(IJobDetail job, IEnumerable<string>? crons = null, IEnumerable<int>? lens = null)
+    {
+        Triggers = Enumerable.Empty<ITrigger>();
+        Crons = crons ?? Enumerable.Empty<string>();
+        Lens = lens ?? Enumerable.Empty<int>();
+        Job = job;
+    }
     public JobKey Key { get => Job.Key; }
     public string JobId { get => $"{Key?.Group}.{Key?.Name}"; }
-    public string Description { get => Job.Description; }
+    public string Description { get => Job.Description ?? string.Empty; }
     public IJobDetail Job { get; set; }
     public IEnumerable<ITrigger> Triggers { get; set; }
     /// <summary>

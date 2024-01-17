@@ -26,7 +26,7 @@ public class DIJobFactory : IJobFactory
         }
         catch { }
         // 无法无参构造时通过DI创建job
-        return _serviceProvider.GetService(type) as IJob;
+        return _serviceProvider.GetService(type) as IJob ?? throw new NullReferenceException();
     }
 
     public void ReturnJob(IJob job)

@@ -30,7 +30,7 @@ public static partial class QuartzTool
     /// <summary>
     /// 获取一个trigger
     /// </summary>
-    public static ITrigger CreateTrigger(object cron, string name, string group = null) => CreateTrigger(cron, new TriggerKey(name, group ?? name));
+    public static ITrigger CreateTrigger(object cron, string name, string? group = null) => CreateTrigger(cron, new TriggerKey(name, group ?? name));
     /// <summary>
     /// 使用type的name作为triggerkey创建trigger
     /// </summary>
@@ -47,7 +47,7 @@ public static partial class QuartzTool
     /// <para>如: 传入 name,group</para>
     /// <para>则会生成 name_1.group, name_2.group, name_3.group ... 这样的key</para>
     /// </remarks>
-    public static IEnumerable<ITrigger> CreateTriggers(IEnumerable<int> crons, string name, string group = null)
+    public static IEnumerable<ITrigger> CreateTriggers(IEnumerable<int> crons, string name, string? group = null)
         => crons.Select((item, index) => CreateTrigger(item, new TriggerKey($"{name}_{index}", $"{group ?? name}"))).ToList();
     /// <summary>
     /// 根据cron的数量生成多个trigger
@@ -57,7 +57,7 @@ public static partial class QuartzTool
     /// <para>如: 传入 name,group</para>
     /// <para>则会生成 name_1.group, name_2.group, name_3.group ... 这样的key</para>
     /// </remarks>
-    public static IEnumerable<ITrigger> CreateTriggers(IEnumerable<object> crons, string name, string group = null)
+    public static IEnumerable<ITrigger> CreateTriggers(IEnumerable<object> crons, string name, string? group = null)
         => crons.Select((item, index) => CreateTrigger(item, new TriggerKey($"{name}_{index}", $"{group.IsEmpty(name)}"))).ToList();
     /// <summary>
     /// 根据cron的数量生成多个trigger
@@ -75,8 +75,8 @@ public static partial class QuartzTool
     /// 根据cron的数量生成多个trigger
     /// </summary>
     public static IEnumerable<ITrigger> CreateTriggers<Job>(params int[] crons) where Job : IJob => CreateTriggers(typeof(Job), crons);
-    public static IEnumerable<TriggerKey> CreateTriggerKeys(int count, string name, string group = null)
+    public static IEnumerable<TriggerKey> CreateTriggerKeys(int count, string name, string? group = null)
     => count <= 0 ? null : Enumerable.Range(0, count).Select(item => new TriggerKey($"{name}_{item}", $"{group ?? name}"));
-    public static IEnumerable<TriggerKey> CreateTriggerKeys(int count, Type type, string group = null) => CreateTriggerKeys(count, type.Name, group);
-    public static IEnumerable<TriggerKey> CreateTriggerKeys<Job>(int count, string group = null) where Job : IJob => CreateTriggerKeys(count, typeof(Job).Name, group);
+    public static IEnumerable<TriggerKey> CreateTriggerKeys(int count, Type type, string? group = null) => CreateTriggerKeys(count, type.Name, group);
+    public static IEnumerable<TriggerKey> CreateTriggerKeys<Job>(int count, string? group = null) where Job : IJob => CreateTriggerKeys(count, typeof(Job).Name, group);
 }

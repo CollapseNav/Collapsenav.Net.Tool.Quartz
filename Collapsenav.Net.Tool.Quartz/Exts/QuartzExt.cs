@@ -7,7 +7,7 @@ namespace Collapsenav.Net.Tool.Ext;
 
 public static partial class QuartzTool
 {
-    public static async Task<IReadOnlyCollection<IJobDetail>> GetJobDetails(this IScheduler scheduler, string group = null)
+    public static async Task<IReadOnlyCollection<IJobDetail>> GetJobDetails(this IScheduler scheduler, string? group = null)
     {
         var jobKeys = await scheduler.GetJobKeys(group);
         List<IJobDetail> details = new();
@@ -15,7 +15,7 @@ public static partial class QuartzTool
             details.Add(await scheduler.GetJobDetail(key));
         return details;
     }
-    public static async Task<IReadOnlyCollection<ITrigger>> GetTriggers(this IScheduler scheduler, string group = null)
+    public static async Task<IReadOnlyCollection<ITrigger>> GetTriggers(this IScheduler scheduler, string? group = null)
     {
         var triggerKeys = await scheduler.GetTriggerKeys(group);
         List<ITrigger> triggers = new();
@@ -84,12 +84,12 @@ public static partial class QuartzTool
         var processor = new XMLSchedulingDataProcessor(new SimpleTypeLoadHelper());
         await processor.ProcessFileAndScheduleJobs(path, scheduler);
     }
-    public static async Task<IReadOnlyCollection<TriggerKey>> GetTriggerKeys(this IScheduler scheduler, string group = null)
+    public static async Task<IReadOnlyCollection<TriggerKey>> GetTriggerKeys(this IScheduler scheduler, string? group = null)
     {
         var matches = group.IsEmpty() ? GroupMatcher<TriggerKey>.AnyGroup() : GroupMatcher<TriggerKey>.GroupEquals(group);
         return await scheduler.GetTriggerKeys(matches);
     }
-    public static async Task<IReadOnlyCollection<JobKey>> GetJobKeys(this IScheduler scheduler, string group = null)
+    public static async Task<IReadOnlyCollection<JobKey>> GetJobKeys(this IScheduler scheduler, string? group = null)
     {
         var matches = group.IsEmpty() ? GroupMatcher<JobKey>.AnyGroup() : GroupMatcher<JobKey>.GroupEquals(group);
         return await scheduler.GetJobKeys(matches);

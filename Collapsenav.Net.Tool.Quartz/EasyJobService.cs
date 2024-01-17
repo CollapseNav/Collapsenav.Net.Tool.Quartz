@@ -16,7 +16,7 @@ internal class EasyJobService : IHostedService
             await QuartzNode.InitSchedulerAsync();
         QuartzNode.InitFactory(_factory);
         await QuartzNode.Scheduler.Start(cancellationToken);
-        await QuartzNode.Builder?.Build();
+        await QuartzNode.Builder.Build();
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

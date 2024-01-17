@@ -76,7 +76,7 @@ public static class QuartzServiceExt
         return services;
     }
 
-    public static IServiceCollection AddScheduler(this IServiceCollection services, IScheduler scheduler = null)
+    public static IServiceCollection AddScheduler(this IServiceCollection services, IScheduler? scheduler = null)
     {
         if (scheduler == null)
         {
@@ -91,7 +91,7 @@ public static class QuartzServiceExt
 
     public static IServiceCollection AddQuartzJsonConfig(this IServiceCollection services, string jsonString)
     {
-        IEnumerable<IQuartzJsonConfig> configs = null;
+        IEnumerable<IQuartzJsonConfig> configs = Enumerable.Empty<IQuartzJsonConfig>();
         // 尝试转为简单的 keyvalue 配置
         try
         {
@@ -104,7 +104,7 @@ public static class QuartzServiceExt
         // 当上一种没有转换成功时尝试直接转为 QuartzConfigNode 格式
         try
         {
-            configs ??= jsonString.ToObj<IEnumerable<QuartzConfigNode>>();
+            configs = jsonString.ToObj<IEnumerable<QuartzConfigNode>>() ?? Enumerable.Empty<IQuartzJsonConfig>();
         }
         catch { }
         // 如果两种转化都失效, 那就抛出异常让他们感受到第三方包的险恶
@@ -114,7 +114,7 @@ public static class QuartzServiceExt
     }
     public static IServiceCollection AddQuartzJsonConfig(this IServiceCollection services, IConfigurationSection section)
     {
-        IEnumerable<IQuartzJsonConfig> configs = null;
+        IEnumerable<IQuartzJsonConfig> configs = Enumerable.Empty<IQuartzJsonConfig>();
         // 尝试转为简单的 keyvalue 配置
         try
         {
@@ -127,7 +127,7 @@ public static class QuartzServiceExt
         // 当上一种没有转换成功时尝试直接转为 QuartzConfigNode 格式
         try
         {
-            configs ??= section.Get<IEnumerable<QuartzConfigNode>>();
+            configs = section.Get<IEnumerable<QuartzConfigNode>>() ?? Enumerable.Empty<IQuartzJsonConfig>(); ;
         }
         catch { }
         // 如果两种转化都失效, 那就抛出异常让他们感受到第三方包的险恶

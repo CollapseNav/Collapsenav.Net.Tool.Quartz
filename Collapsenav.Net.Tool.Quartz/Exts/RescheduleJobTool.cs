@@ -15,7 +15,7 @@ public static partial class QuartzTool
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob(this IScheduler scheduler, ITrigger trigger, TriggerKey triggerKey = null)
+    public static async Task RescheduleJob(this IScheduler scheduler, ITrigger trigger, TriggerKey? triggerKey = null)
     {
         await scheduler.PauseTrigger(triggerKey ?? trigger.Key);
         await scheduler.RescheduleJob(triggerKey ?? trigger.Key, trigger);
@@ -23,7 +23,7 @@ public static partial class QuartzTool
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob(this IScheduler scheduler, ITrigger trigger, string name, string group = null)
+    public static async Task RescheduleJob(this IScheduler scheduler, ITrigger trigger, string name, string? group = null)
     {
         if (group.IsEmpty())
         {
@@ -47,7 +47,7 @@ public static partial class QuartzTool
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob(this IScheduler scheduler, object cron, string name, string group = null)
+    public static async Task RescheduleJob(this IScheduler scheduler, object cron, string name, string? group = null)
         => await scheduler.RescheduleJob(CreateTrigger(cron, name, group), name, group);
 
 
@@ -64,7 +64,7 @@ public static partial class QuartzTool
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob(this IScheduler scheduler, Type type, ITrigger trigger, TriggerKey triggerKey = null)
+    public static async Task RescheduleJob(this IScheduler scheduler, Type type, ITrigger trigger, TriggerKey? triggerKey = null)
     {
         await scheduler.PauseTrigger(triggerKey ?? trigger.Key);
         var offset = await scheduler.RescheduleJob(trigger.Key, trigger);
@@ -75,7 +75,7 @@ public static partial class QuartzTool
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob(this IScheduler scheduler, Type type, ITrigger trigger, string name, string group = null)
+    public static async Task RescheduleJob(this IScheduler scheduler, Type type, ITrigger trigger, string name, string? group = null)
     {
         if (group.IsEmpty())
         {
@@ -100,7 +100,7 @@ public static partial class QuartzTool
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob(this IScheduler scheduler, Type type, object cron, string name = null, string group = null)
+    public static async Task RescheduleJob(this IScheduler scheduler, Type type, object cron, string? name = null, string? group = null)
     {
         name ??= type.Name;
         await scheduler.RescheduleJob(type, CreateTrigger(cron, name, group), name, group);
@@ -126,7 +126,7 @@ public static partial class QuartzTool
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob<Job>(this IScheduler scheduler, ITrigger trigger, TriggerKey triggerKey = null) where Job : IJob
+    public static async Task RescheduleJob<Job>(this IScheduler scheduler, ITrigger trigger, TriggerKey? triggerKey = null) where Job : IJob
     {
         await scheduler.PauseTrigger(triggerKey ?? trigger.Key);
         var offset = await scheduler.RescheduleJob(trigger.Key, trigger);
@@ -136,7 +136,7 @@ public static partial class QuartzTool
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob<Job>(this IScheduler scheduler, ITrigger trigger, string name, string group = null) where Job : IJob
+    public static async Task RescheduleJob<Job>(this IScheduler scheduler, ITrigger trigger, string name, string? group = null) where Job : IJob
         => await scheduler.RescheduleJob(typeof(Job), trigger, name, group);
     /// <summary>
     /// 重设trigger
@@ -146,7 +146,7 @@ public static partial class QuartzTool
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob<Job>(this IScheduler scheduler, object cron, string name = null, string group = null) where Job : IJob
+    public static async Task RescheduleJob<Job>(this IScheduler scheduler, object cron, string? name = null, string? group = null) where Job : IJob
         => await RescheduleJob<Job>(scheduler, CreateTrigger(cron, name.IsEmpty(typeof(Job).Name), group), name.IsEmpty(typeof(Job).Name), group);
     /// <summary>
     /// 重设trigger
