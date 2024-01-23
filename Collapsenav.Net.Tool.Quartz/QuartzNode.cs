@@ -15,7 +15,7 @@ public class QuartzNode
     {
         Services = services;
     }
-#if NETCOREAPP2_1_OR_GREATER
+#if NETCOREAPP2_0_OR_GREATER
     [MemberNotNull("Scheduler")]
 #endif
     public static async Task InitSchedulerAsync(IScheduler? scheduler = null)

@@ -4,28 +4,17 @@ namespace Collapsenav.Net.Tool.Ext;
 
 public static partial class QuartzTool
 {
+    public static ITrigger CreateTrigger(TriggerConfig config)
+    {
+        return config.InitTriggerBuilder();
+    }
     public static ITrigger CreateTrigger(object obj, TriggerKey tkey, DateTime? start = null, DateTime? end = null)
     {
-        // 传入的obj必须是 string 或 int
-        if (obj is not (string or int))
-            throw new ArgumentException("obj need int or string");
-        // 初始化一个 builder
-        var triggerBuilder = TriggerBuilder.Create()
-            .WithIdentity(tkey);
-        // 默认立刻开始
-        if (start.HasValue)
-            triggerBuilder.StartAt(start.Value);
-        else
-            triggerBuilder.StartNow();
-
-        if (end.HasValue)
-            triggerBuilder.EndAt(end.Value);
-
-        if (obj is string cron)
-            triggerBuilder.WithCronSchedule(cron);
-        else if (obj is int len)
-            triggerBuilder.WithSimpleSchedule(builder => builder.WithIntervalInSeconds(len).RepeatForever());
-        return triggerBuilder.Build();
+        return CreateTrigger(new TriggerConfig(obj, tkey)
+        {
+            Start = start,
+            End = end,
+        });
     }
     /// <summary>
     /// 获取一个trigger

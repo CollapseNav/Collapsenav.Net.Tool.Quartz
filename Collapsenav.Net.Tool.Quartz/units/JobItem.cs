@@ -4,10 +4,14 @@ namespace Collapsenav.Net.Tool.Ext;
 
 public abstract class JobItem
 {
-    public JobItem(Type jobtype)
+    public JobItem(Type jobtype, TriggerConfig? triggerConfig = null)
     {
         JobType = jobtype;
+        if (triggerConfig != null)
+        {
+        }
     }
+    protected TriggerConfig? TriggerConfig { get; set; }
     public Type JobType { get; set; }
     public JobKey JKey { get => jKey ?? new JobKey(JobType.Name, JobType.Name); set => jKey = value; }
     private JobKey? jKey;
@@ -22,6 +26,12 @@ public abstract class JobItem
 /// </summary>
 public class CronJob : JobItem
 {
+    public CronJob(Type jobtype, TriggerConfig triggerConfig) : base(jobtype)
+    {
+        if (triggerConfig.Obj is string cron)
+            Cron = cron;
+        else throw new Exception();
+    }
     public CronJob(Type jobtype, string cron) : base(jobtype)
     {
         Cron = cron;
@@ -34,6 +44,12 @@ public class CronJob : JobItem
 /// </summary>
 public class SimpleJob : JobItem
 {
+    public SimpleJob(Type jobtype, TriggerConfig triggerConfig) : base(jobtype)
+    {
+        if (triggerConfig.Obj is int len)
+            Len = len;
+        else throw new Exception();
+    }
     public SimpleJob(Type jobtype, int len) : base(jobtype)
     {
         Len = len;

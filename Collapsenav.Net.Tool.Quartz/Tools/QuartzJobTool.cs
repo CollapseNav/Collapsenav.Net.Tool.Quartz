@@ -6,9 +6,11 @@ public static partial class QuartzTool
     /// 根据 type 创建 job
     /// </summary>
     public static IJobDetail CreateJob(Type type, JobKey? jkey = null)
-        => JobBuilder.Create(type)
+    {
+        return JobBuilder.Create(type)
         .WithIdentity(jkey ?? new JobKey(type.Name, type.Name))
         .Build();
+    }
     /// <summary>
     /// 根据 type 创建 job, 使用传入的 name 作为jobkey
     /// </summary>
