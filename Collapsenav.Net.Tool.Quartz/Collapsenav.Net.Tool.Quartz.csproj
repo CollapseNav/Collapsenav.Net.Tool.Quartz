@@ -3,7 +3,7 @@
     <PropertyGroup>
         <PackageTags>Tool,Quartz</PackageTags>
         <Description>
-简单的Quartz扩展
+            简单的Quartz扩展
         </Description>
         <Product>Collapsenav.Net.Tool.Quartz</Product>
         <PackageId>Collapsenav.Net.Tool.Quartz</PackageId>
@@ -14,6 +14,7 @@
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\Collapsenav.Net.Tool.Base\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj" />
+        <!-- <ProjectReference Include="..\..\Collapsenav.Net.Tool.Base\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj" /> -->
+        <PackageReference Include="Collapsenav.Net.Tool" Version="1.4.0" />
     </ItemGroup>
 </Project>
